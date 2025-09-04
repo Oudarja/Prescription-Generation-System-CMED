@@ -8,9 +8,15 @@ import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+// Treat this class as a Spring configuration class.
 @Configuration
 public class OpenApiConfig {
 
+    // Define a bean for OpenAPI configuration.
+    // When the application starts, run this method and register its
+    //  return value (OpenAPI object) as a Spring bean in the application context
+    // customOpenAPI is an method that returns OpenAPI object
+    
     @Bean
     public OpenAPI customOpenAPI() {
         return new OpenAPI()
@@ -18,9 +24,9 @@ public class OpenApiConfig {
             .components(new Components()
                 .addSecuritySchemes("bearerAuth",
                     new SecurityScheme()
-                        .type(SecurityScheme.Type.HTTP)
-                        .scheme("bearer")
-                        .bearerFormat("JWT")
+                    .type(SecurityScheme.Type.HTTP)
+                    .scheme("bearer")
+                    .bearerFormat("JWT")
                 )
             )
             .addSecurityItem(new SecurityRequirement().addList("bearerAuth"));
