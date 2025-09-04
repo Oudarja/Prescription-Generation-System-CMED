@@ -1,0 +1,75 @@
+/* General App styles */
+.App {
+  text-align: center;
+  font-family: Arial, sans-serif;
+}
+
+/* Header styling */
+.App-header {
+  display: flex;               
+  justify-content: space-between; /* Title left, nav right */
+  align-items: center;         
+  background-color: #282c34;
+  color: white;
+  padding: 20px 40px;
+}
+
+.App-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+/* Navigation links */
+/* Navigation links */
+.nav-links a {
+  color: #61dafb;
+  margin-left: 20px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: all 0.2s;
+  font-size: 1rem; /* default size */
+}
+
+/* Hover effect: slightly bigger */
+.nav-links a:hover {
+  color: #21a1f1;
+  font-size: 1.2rem; /* grows on hover */
+}
+
+/* Form container */
+.form-container {
+  margin: 40px auto;
+  max-width: 400px;
+  padding: 20px;
+  background-color: #f5f5f5;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.1);
+}
+
+/* Input fields */
+.form-container input {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-sizing: border-box;
+}
+
+/* Buttons */
+.form-container button {
+  width: 100%;
+  padding: 10px;
+  background-color: #282c34;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.form-container button:hover {
+  background-color: #61dafb;
+  color: #282c34;
+}

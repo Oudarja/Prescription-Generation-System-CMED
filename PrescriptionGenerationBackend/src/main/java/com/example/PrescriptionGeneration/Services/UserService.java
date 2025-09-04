@@ -18,19 +18,27 @@ public class UserService {
     private BCryptPasswordEncoder passwordEncoder;
 
     public User registerUser(User user) {
-        
-        if(userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("Email already exists");
-        }
 
-        // Hash the password before saving
-        user.setPassword(passwordEncoder.encode(user.getPassword()));
-        return userRepository.save(user);
+        try{
+
+            if(userRepository.existsByEmail(user.getEmail())) {
+                throw new RuntimeException("Email already exists");
+            }
+            // Hash the password before saving
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            return userRepository.save(user);
+        } catch (Exception e) {
+            System.err.println("Registration failed: " + e.getMessage());
+             throw new RuntimeException("Registration failed. Please try again later.");
+            }
+
     }
 
 
     // Login using email
     public String loginUser(String email, String rawPassword, JwtUtil jwtUtil) {
+
+        try{
         // Fetches user by email:
         Optional<User> optionalUser = userRepository.findByEmail(email);
 
@@ -51,5 +59,11 @@ public class UserService {
         // This token will be used to access any  secured api endpoint
         return jwtUtil.generateToken(user.getEmail());
     }
+    catch (Exception e) {
+        System.err.println("Login failed: " + e.getMessage());
+        throw new RuntimeException("Login failed. Please try again later.");
+    }
+
+}
 
 }
