@@ -1,52 +1,45 @@
 import './App.css';
-import { BrowserRouter as Router, Routes, Route, Navigate, NavLink} from "react-router-dom";
-import { Link } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, Navigate} from "react-router-dom";
 import RegistrationForm from './Components/RegistrationForm';
 import LoginForm from './Components/LoginForm';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import Navbar from './Components/Navbar';
+import PrescriptionList from './Components/PrescriptionList';
+import PrescriptionForm from './Components/PrescriptionForm';
 function App() {
   
   // check for token in local storage
   // if token is present, user is authenticated
   // if token is not present, user is not authenticated
-  const isAuthenticated = !!localStorage.getItem("token");
+    // const [isAuthenticated, setIsAuthenticated] = useState(false);
+    const [isAuthenticated, setIsAuthenticated] = useState(null);
 
+  // Check token on load
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    setIsAuthenticated(!!token);
+  }, []);
+
+if (isAuthenticated === null) return null; // wait until we know
   return (
-    // <Router>
-    //   <div className="App">
-    //     <header className="App-header">
-    //       <h1>Prescription Generation System</h1>
-    //       <nav className="nav-links">
-    //         <Link to="/register">Register</Link>
-    //         <Link to="/login">Login</Link>
-    //       </nav>
-    //     </header>
-
-    //     <main className="form-container">
-    //       <Routes>
-    //         <Route path="/" element={<Navigate to="/register" />} />
-    //         <Route path="/register" element={<RegistrationForm />} />
-    //         <Route path="/login" element={<LoginForm />} />
-    //       </Routes>
-    //     </main>
-    //   </div>
-    // </Router>
+    
      <Router>
       <div className="App">
         <header className="App-header">
-          <h1>Prescription Generation System</h1>
-         <nav className="nav-links">
-  <Link to="/register">Register</Link>
-  <Link to="/login">Login</Link>
-</nav>
-
+          {/* Pass isAuthenticated and setIsAuthenticated to Navbar so it can react to login/logout */}
+           <Navbar isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/> 
         </header>
 
-        <main className="form-container">
+        <main>
           <Routes>
             <Route path="/" element={<Navigate to="/register" />} />
-            <Route path="/register" element={<RegistrationForm />} />
-            <Route path="/login" element={<LoginForm />} />
+            <Route path="/register" element={<div className="form-container"><RegistrationForm /></div>} />
+            {/* trigger a state update that Navbar can listen to.
+            Lift the authentication state up to a parent (e.g., App.js) and pass it down to Navbar. */}
+            <Route path="/login" element={<div className="form-container"><LoginForm isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/></div>} />
+            {/* Protected Route */}
+            <Route path="/prescriptions" element={ isAuthenticated ? ( <PrescriptionList /> ) : ( <Navigate to="/login" /> ) } />
+            <Route path="/prescription/new" element={ isAuthenticated ? ( <PrescriptionForm /> ) : ( <Navigate to="/login" /> ) } />
           </Routes>
         </main>
       </div>
