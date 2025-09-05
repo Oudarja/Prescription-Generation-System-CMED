@@ -24,6 +24,7 @@ public PrescriptionService(PrescriptionRepository prescriptionRepository)
 
 public Prescription savePrescription(PrescriptionRequest prescriptionRequest) 
 {
+    try{
     Prescription prescription = new Prescription();
     prescription.setPrescriptionDate(prescriptionRequest.getPrescriptionDate());
     prescription.setPatientName(prescriptionRequest.getPatientName());
@@ -33,7 +34,14 @@ public Prescription savePrescription(PrescriptionRequest prescriptionRequest)
     prescription.setMedicines(prescriptionRequest.getMedicines());
     prescription.setNextVisitDate(prescriptionRequest.getNextVisitDate());
     return prescriptionRepository.save(prescription);
+ }
+ catch(Exception e){
+     System.err.println("Saving failed: " + e.getMessage());
+    throw new RuntimeException("Failed to save prescription: " + e.getMessage());
+ }
+
 }
+
 
 // Edit prescription 
 public Prescription updatePrescription(Long id, Prescription updatedPrescription) {
@@ -61,12 +69,11 @@ public Prescription updatePrescription(Long id, Prescription updatedPrescription
 
         return prescriptionRepository.save(existingPrescription);
 
-    } catch (RuntimeException ex) {
-        // If prescription not found
-        throw new RuntimeException("Error updating prescription: " + ex.getMessage(), ex);
-    } catch (Exception ex) {
+    } 
+    catch (Exception e) {
+        System.err.println("Update failed: " + e.getMessage());
         // Catch any unexpected errors
-        throw new RuntimeException("Unexpected error while updating prescription", ex);
+        throw new RuntimeException("Unexpected error while updating prescription", e);
     }
 }
 
@@ -80,6 +87,7 @@ public void deletePrescription(Long id) {
         }
         prescriptionRepository.deleteById(id);
     } catch (Exception e) {
+        System.err.println("Deletion failed: " + e.getMessage());
         // You can log the exception if needed
         throw new RuntimeException("Failed to delete prescription: " + e.getMessage());
     }
@@ -88,18 +96,43 @@ public void deletePrescription(Long id) {
 
 public List<Prescription> getAllPrescriptions() 
 {
-    return (List<Prescription>) prescriptionRepository.findAll();
+    try {
+        return (List<Prescription>) prescriptionRepository.findAll();
+    } catch (Exception e) {
+        System.err.println("Failed to fetch prescriptions: " + e.getMessage());
+        throw new RuntimeException("Failed to fetch prescriptions: " + e.getMessage());
+    }
 }
 
 public List<Object[]> getDayWisePrescriptionCount() 
 {
-    return prescriptionRepository.getDayWisePrescriptionCount();
+    try {
+        return prescriptionRepository.getDayWisePrescriptionCount();
+    } catch (Exception e) {
+        System.err.println("Failed to fetch day-wise prescription count: " + e.getMessage());
+        throw new RuntimeException("Failed to fetch day-wise prescription count: " + e.getMessage());
+    }
 }
 
    public List<Prescription> getPrescriptionsByMonth(int year, int month) {
-    LocalDate start = LocalDate.of(year, month, 1);
-    LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
-    return prescriptionRepository.findByPrescriptionDateBetween(start, end);
+    try {
+        if (month < 1 || month > 12) {
+            throw new IllegalArgumentException("Month must be between 1 and 12");
+        }
+
+        LocalDate start = LocalDate.of(year, month, 1);
+        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+        return prescriptionRepository.findByPrescriptionDateBetween(start, end);
+    } 
+    catch (IllegalArgumentException e) 
+    {
+        throw new IllegalArgumentException("Invalid month: " + e.getMessage());
+    }
+    catch (Exception e) 
+    {
+        System.err.println("Failed to fetch prescriptions by month: " + e.getMessage());
+        throw new RuntimeException("Failed to fetch prescriptions by month: " + e.getMessage());
+    }
 }
 
 }
