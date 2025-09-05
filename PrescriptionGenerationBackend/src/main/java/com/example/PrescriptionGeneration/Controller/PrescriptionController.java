@@ -51,6 +51,13 @@ public ResponseEntity<Void> deletePrescription(@PathVariable Long id)
         return ResponseEntity.ok(prescriptions);
     }
 
+    // Get prescription by ID
+    @GetMapping("/fetch-one/{id}")
+    public ResponseEntity<Prescription> getPrescriptionById(@PathVariable Long id) {
+        Prescription prescription = prescriptionService.getPrescriptionById(id);
+        return ResponseEntity.ok(prescription);
+    }
+
     // Get day-wise prescription count
     @GetMapping("/report/daywise")
     public ResponseEntity<List<Object[]>> getDayWiseReport() {

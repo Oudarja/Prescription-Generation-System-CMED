@@ -104,6 +104,20 @@ public List<Prescription> getAllPrescriptions()
     }
 }
 
+public Prescription getPrescriptionById(Long id) 
+{
+    try {
+        Optional<Prescription> prescription = prescriptionRepository.findById(id);
+        if (!prescription.isPresent()) {
+            throw new RuntimeException("Prescription not found with id: " + id);
+        }
+        return prescription.get();
+    } catch (Exception e) {
+        System.err.println("Failed to fetch prescription: " + e.getMessage());
+        throw new RuntimeException("Failed to fetch prescription: " + e.getMessage());
+    }
+}
+
 public List<Object[]> getDayWisePrescriptionCount() 
 {
     try {

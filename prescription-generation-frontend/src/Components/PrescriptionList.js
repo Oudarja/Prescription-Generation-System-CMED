@@ -61,7 +61,7 @@ const PrescriptionList = () => {
                 <td className="actions">
                   <button
                     className="edit-btn"
-                    onClick={() => navigate(`/prescriptions/edit/${p.id}`)}
+                    onClick={() => navigate(`/prescription/new/${p.id}`)}
                   >
                     Edit
                   </button>
