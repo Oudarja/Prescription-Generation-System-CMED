@@ -5,19 +5,28 @@ import "../App.css";
 
 const PrescriptionList = () => {
   const [prescriptions, setPrescriptions] = useState([]);
+
+  const [selectedDate, setSelectedDate] = useState(() => {
+  const yesterday = new Date();
+  yesterday.setDate(yesterday.getDate() - 1);
+  // Y-M-D (default date is set yesterday of present date of current month)
+  return yesterday.toISOString().split("T")[0]; 
+});
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchPrescriptions = async () => {
+    const fetchPrescriptions = async (selectedDate) => {
       try {
-        const res = await api.get("/prescriptions/fetch-all-prescriptions");
+        console.log("Selected Date:", selectedDate);
+        const [year, month, day] = selectedDate.split("-").map(Number);
+        const res = await api.get(`/prescriptions/fetch-all-by-month/${year}/${month}/${day}`);
         setPrescriptions(res.data);
       } catch (err) {
         alert("Failed to fetch prescriptions");
       }
     };
-    fetchPrescriptions();
-  }, []);
+    fetchPrescriptions(selectedDate);
+  }, [selectedDate]);
 
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete?")) {
@@ -32,6 +41,17 @@ const PrescriptionList = () => {
       <div className="prescription-heading-container">
         <h1>Prescription List</h1>
       </div>
+      {/* Date picker */}
+        <input type="date" value={selectedDate} onChange={(e) => setSelectedDate(e.target.value)} style={{ 
+          padding: "6px 10px",
+          marginTop: "10px",
+          border: "2px solid black",
+          borderRadius: "6px",
+          fontSize: "14px",
+          width: "180px",       
+          textAlign: "center",   
+          cursor: "pointer"
+        }} />
 
       {/* Bottom container for table */}
       <div className="prescription-table-container">

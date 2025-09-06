@@ -65,11 +65,13 @@ public ResponseEntity<Void> deletePrescription(@PathVariable Long id)
         return ResponseEntity.ok(report);
     }
 
-    @GetMapping("/fetch-all-by-month")
+    @GetMapping("/fetch-all-by-month/{year}/{month}/{day}")
     public ResponseEntity<List<Prescription>> getPrescriptionsByMonth(
-            @RequestParam int year,
-            @RequestParam int month) {
-    List<Prescription> prescriptions = prescriptionService.getPrescriptionsByMonth(year, month);
+            @PathVariable int year,
+            @PathVariable int month,
+            @PathVariable int day
+            ) {
+    List<Prescription> prescriptions = prescriptionService.getPrescriptionsByRange(year, month, day);
     return ResponseEntity.ok(prescriptions);
 }
 
