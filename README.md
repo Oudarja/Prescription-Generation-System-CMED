@@ -205,12 +205,42 @@ PrescriptionGenerationBackend/
    - application.properties → App configuration (DB, security, server port, etc.).
    - prescriptiondb.mv.db → H2 database file storing prescription & user data.
 
+### Architecture or Pattern:
+This project follows the Model–View–Controller (MVC) architecture, ensuring clean separation of concerns:
+- Model (M)
+  - Represents the application’s data and business objects.
+  - Classes in Model/ (User.java, Prescription.java) define the structure of entities stored in the database.
+  - Repository/ interfaces (UserRepository.java, PrescriptionRepository.java) handle persistence and database operations.
+  - Services/ (UserService.java, PrescriptionService.java) contain the business logic connecting controllers to repositories.
+- View (V)
+  - The frontend React.js application (prescription-generation-frontend/) acts as the view layer.
+  - Components like PrescriptionForm.js, PrescriptionList.js, and PrescriptionPerDay.js render data from APIs into user-friendly tables and forms.
+   - React ensures a smooth user experience with styled UI and dynamic updates.
+- Controller (C)
+  - REST controllers in the backend (Controller/) manage incoming HTTP requests and map them to services.
+  - AuthController.java → Handles authentication and JWT generation.
+  - PrescriptionController.java → Handles CRUD operations and reporting for prescriptions.
+
 - ### Future Scope:
  - In future pagination can be added in api if big data needs to be handled.
  - Caching can be integrated to reduce API call so that application performance gets better.
  - Unit tests may be written and github action flow and docker can be set up.
- - AWS deployment is also possible etc.   
-  
+ - AWS deployment is also possible etc.
+
+### Notes: 
+``` bash
+
+Benefits of MVC Here:
+
+- Separation of Concerns → Business logic (Service), request handling (Controller), and data (Model) are decoupled.
+
+- Scalability → Easy to extend features (new endpoints, new frontend views).
+
+- Maintainability → Developers can work independently on frontend (View) or backend (Model & Controller).
+
+- Security → JWT authentication handled at the controller and security layers without leaking into business logic.
+
+```
 
    
 
