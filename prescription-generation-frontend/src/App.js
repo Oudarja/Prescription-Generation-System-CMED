@@ -6,6 +6,8 @@ import React, { useEffect, useState } from 'react';
 import Navbar from './Components/Navbar';
 import PrescriptionList from './Components/PrescriptionList';
 import PrescriptionForm from './Components/PrescriptionForm';
+import PrescriptionPerDay from './Components/PrescriptionPerDay';
+import Consume from './Components/Consume';
 function App() {
   
   // check for token in local storage
@@ -39,7 +41,9 @@ if (isAuthenticated === null) return null; // wait until we know
             <Route path="/login" element={<div className="form-container"><LoginForm isAuthenticated={isAuthenticated} setIsAuthenticated={setIsAuthenticated}/></div>} />
             {/* Protected Route */}
             <Route path="/prescriptions" element={ isAuthenticated ? ( <PrescriptionList /> ) : ( <Navigate to="/login" /> ) } />
-            <Route path="/prescription/new" element={ isAuthenticated ? ( <PrescriptionForm /> ) : ( <Navigate to="/login" /> ) } />
+            <Route path="/prescription/new/:id?" element={ isAuthenticated ? ( <PrescriptionForm /> ) : ( <Navigate to="/login" /> ) } />
+            <Route path="/prescription/count/day" element={ isAuthenticated ? ( <PrescriptionPerDay /> ) : ( <Navigate to="/login" /> ) } />
+            <Route path="/prescription/consume" element={ isAuthenticated ? ( <Consume /> ) : ( <Navigate to="/login" /> ) } />
           </Routes>
         </main>
       </div>

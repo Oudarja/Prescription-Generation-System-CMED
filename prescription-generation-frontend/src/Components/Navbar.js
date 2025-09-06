@@ -33,6 +33,8 @@ const Navbar = ({ isAuthenticated, setIsAuthenticated }) => {
   <div className="links-left">
     <Link to="/prescriptions">Home</Link>
     <Link to="/prescription/new">Add-Prescription</Link>
+    <Link to="/prescription/count/day">Prescriptions / Day</Link>
+    <Link to="/prescription/consume">API-Consume</Link>
   </div>
   <button onClick={handleLogout} className="logout-btn">Logout</button>
 </div>

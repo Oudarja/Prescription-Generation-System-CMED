@@ -1,5 +1,6 @@
 package com.example.PrescriptionGeneration.Services;
 
+import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -104,6 +105,20 @@ public List<Prescription> getAllPrescriptions()
     }
 }
 
+public Prescription getPrescriptionById(Long id) 
+{
+    try {
+        Optional<Prescription> prescription = prescriptionRepository.findById(id);
+        if (!prescription.isPresent()) {
+            throw new RuntimeException("Prescription not found with id: " + id);
+        }
+        return prescription.get();
+    } catch (Exception e) {
+        System.err.println("Failed to fetch prescription: " + e.getMessage());
+        throw new RuntimeException("Failed to fetch prescription: " + e.getMessage());
+    }
+}
+
 public List<Object[]> getDayWisePrescriptionCount() 
 {
     try {
@@ -114,25 +129,23 @@ public List<Object[]> getDayWisePrescriptionCount()
     }
 }
 
-   public List<Prescription> getPrescriptionsByMonth(int year, int month) {
+   public List<Prescription> getPrescriptionsByRange(int year, int month, int day) {
     try {
-        if (month < 1 || month > 12) {
-            throw new IllegalArgumentException("Month must be between 1 and 12");
-        }
-
+        // First day of the given month
         LocalDate start = LocalDate.of(year, month, 1);
-        LocalDate end = start.withDayOfMonth(start.lengthOfMonth());
+
+        // The specific day given
+        LocalDate end = LocalDate.of(year, month, day);
+
+        // Query prescriptions between start and end (inclusive)
         return prescriptionRepository.findByPrescriptionDateBetween(start, end);
-    } 
-    catch (IllegalArgumentException e) 
-    {
-        throw new IllegalArgumentException("Invalid month: " + e.getMessage());
-    }
-    catch (Exception e) 
-    {
-        System.err.println("Failed to fetch prescriptions by month: " + e.getMessage());
-        throw new RuntimeException("Failed to fetch prescriptions by month: " + e.getMessage());
+    } catch (DateTimeException e) {
+        throw new IllegalArgumentException("Invalid date: " + e.getMessage());
+    } catch (Exception e) {
+        System.err.println("Failed to fetch prescriptions by range: " + e.getMessage());
+        throw new RuntimeException("Failed to fetch prescriptions by range: " + e.getMessage());
     }
 }
+
 
 }

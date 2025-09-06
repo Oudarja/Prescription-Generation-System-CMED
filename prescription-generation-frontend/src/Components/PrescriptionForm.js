@@ -8,8 +8,8 @@ const PrescriptionForm = () => {
   const navigate = useNavigate();
   const [form, setForm] = useState({
     patientName: "",
-    age: "",
-    gender: "",
+    patientAge: "",
+    patientGender: "",
     diagnosis: "",
     medicines: "",
     prescriptionDate: "",
@@ -19,12 +19,15 @@ const PrescriptionForm = () => {
   useEffect(() => {
     if (id) {
       const fetchPrescription = async () => {
-        const res = await api.get(`/prescriptions/${id}`);
+        // api has to be built in such a way that it fetches one prescription by id
+        const res = await api.get(`/prescriptions/fetch-one/${id}`);
         setForm(res.data);
       };
       fetchPrescription();
     }
   }, [id]);
+
+  
 
   const handleChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
 
@@ -32,9 +35,9 @@ const PrescriptionForm = () => {
     e.preventDefault();
     try {
       if (id) {
-        await api.put(`/prescriptions/${id}`, form);
+        await api.put(`/prescriptions/edit/${id}`, form);
       } else {
-        await api.post("/prescriptions", form);
+        await api.post("/prescriptions/create-prescription", form);
       }
       navigate("/prescriptions");
     } catch (err) {
@@ -48,8 +51,8 @@ const PrescriptionForm = () => {
   <h2>{id ? "Edit" : "New"} Prescription</h2>
   <form onSubmit={handleSubmit}>
     <input name="patientName" placeholder="Patient Name" value={form.patientName} onChange={handleChange} required />
-    <input name="age" placeholder="Age" value={form.age} onChange={handleChange} required />
-    <select name="gender" value={form.gender} onChange={handleChange} required>
+    <input name="patientAge" placeholder="Age" value={form.patientAge} onChange={handleChange} required />
+    <select name="patientGender" value={form.patientGender} onChange={handleChange} required>
       <option value="">Select Gender</option>
       <option value="Male">Male</option>
       <option value="Female">Female</option>
