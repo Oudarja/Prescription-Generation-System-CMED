@@ -33,7 +33,7 @@ The project is built using **React.js** for frontend and **Spring Boot** (Java 1
 - JWT-based authentication ensures secure access to endpoints.
 - Swagger UI available for testing and documentation of APIs.
 
-### 5. UI/UX Enhancements
+### 5. UI Enhancements
 - **Date picker** with:
   - Upon successful login, the system automatically sets the default date to yesterday, ensuring that authenticated users initially view prescriptions from the 1st of the current month up to yesterday’s date.
   - Centered text and proper padding
