@@ -221,7 +221,7 @@ This project follows the Model–View–Controller (MVC) architecture, ensuring 
   - AuthController.java → Handles authentication and JWT generation.
   - PrescriptionController.java → Handles CRUD operations and reporting for prescriptions.
 
-- ### Future Scope:
+### Future Scope:
  - In future pagination can be added in api if big data needs to be handled.
  - Caching can be integrated to reduce API call so that application performance gets better.
  - Unit tests may be written and github action flow and docker can be set up.
